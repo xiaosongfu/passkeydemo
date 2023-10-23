@@ -12,14 +12,16 @@
   </body>
   <script async>
     const userId = "123";
+    //const rpId = "localhost";
+    const rpId = "xiaosongfu.github.io"
     async function create() {
       console.log("create");
 
       const publicKeyCredentialCreationOptions = {
-        challenge: str2ab("asfs"),
+        challenge: str2ab("erd2n5wescksuEefCEgQRKJB_xfMF4rJMinTXSP72E8"),
         rp: {
           name: "Localhost",
-          id: "xiaosongfu.github.io",
+          id: rpId,
         },
         user: {
           id: str2ab(userId),
@@ -49,19 +51,25 @@
 
       const publicKeyCredentialRequestOptions = {
         // Server generated challenge
-        challenge: str2ab("gdsdf"),
+        challenge: str2ab("gVQ2n5wescksuEefCEgQRKJB_xfMF4rJMinTXSP72E8"),
         // The same RP ID as used during registration
-        rpId: "xiaosongfu.github.io",
+        rpId: rpId,
+        allowCredentials: [],
       };
 
-      const credential = await navigator.credentials.get({
-        publicKey: publicKeyCredentialRequestOptions,
-        signal: abortController.signal,
-        // Specify 'conditional' to activate conditional UI
-        mediation: "conditional",
-      });
+      try {
+        const credential = await navigator.credentials.get({
+          publicKey: publicKeyCredentialRequestOptions,
+          // signal: abortController.signal,
+          // Specify 'conditional' to activate conditional UI
+          // mediation: "conditional",
+        });
 
-      console.log("get-credential~~ ", credential);
+        console.log("get-credential~~ ", credential);
+        console.log("user id: ", ab2str(credential.response.userHandle));
+      } catch (err) {
+        console.log("err~~ ", err);
+      }
     }
 
     function str2ab(str) {
@@ -71,6 +79,10 @@
         bufView[i] = str.charCodeAt(i);
       }
       return buf;
+    }
+
+    function ab2str(buf) {
+      return String.fromCharCode.apply(null, new Uint16Array(buf));
     }
   </script>
 </html>
